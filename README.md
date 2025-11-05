@@ -1,0 +1,192 @@
+# Transactions Analysis Using Pandas
+
+## Project Overview
+
+A comprehensive **data analysis project** leveraging Python Pandas and NumPy to analyze transactional retail data from a company acquisition target. This project demonstrates enterprise-level exploratory data analysis (EDA), data wrangling, and business insights extraction from large-scale retail transaction datasets.
+
+## Project Goals
+
+- Perform exploratory data analysis on transactional retail data
+- Implement data type optimization and memory efficiency improvements
+- Conduct multi-dimensional business analysis across households, products, and categories
+- Identify key customer segments and high-value product opportunities
+- Extract actionable business insights for acquisition due diligence
+
+## Technology Stack
+
+| Component | Technology |
+|-----------|-----------|
+| **Language** | Python 3.x |
+| **Data Processing** | Pandas, NumPy |
+| **Data Visualization** | Matplotlib |
+| **Dataset Size** | 2.1M+ transactions |
+| **Data Types** | CSV, XLSX |
+| **Notebook Environment** | Jupyter |
+
+## Dataset Overview
+
+**Transactions Dataset (transactions.csv):**
+- **Records**: 2,146,311 transaction lines
+- **Time Period**: Multi-week transaction history
+- **Key Fields**: HouseholdKey, BasketID, Day, ProductID, Quantity, SalesValue, StoreID, RetailDisc, WeekNo, CouponDisc, CouponMatchDisc
+
+**Product Dataset (product.csv):**
+- Product master data with manufacturer, department, brand, and commodity information
+- 84,138+ unique products
+
+## Data Analysis Highlights
+
+### Data Optimization & Cleaning
+
+**Memory Efficiency Improvement**
+- Optimized data types by casting columns to smallest appropriate types
+- DAY: int64 → int8
+- QUANTITY: int64 → int32  
+- STOREID: int64 → int32
+- WEEKNO: int64 → int8
+- **Result**: Memory usage reduced from 180.1 MB to 135.1 MB (25% reduction)
+
+**Data Quality Assessment**
+- **Missing Data**: Zero missing values across all 11 columns
+- **Unique Values**: 2,099 unique households, 84,138 unique products
+- **Data Consistency**: All date and transaction fields validated
+
+### Feature Engineering
+
+**Discount Analysis**
+- Calculated total discount across retail discount and coupon discount columns
+- Derived percentage discount: (TotalDiscount / SalesValue).abs()
+- Bounded discount percentages between 0 and 1
+- Identified high-discount transactions for pricing strategy analysis
+
+### Business Metrics
+
+**Overall Statistics (2021 Dataset)**
+- Total Sales: $6,666,243.50
+- Total Discount: -$1,178,658.08
+- Overall Discount Rate: -17.68% (negative indicates net discounting)
+- Total Units Sold: 216,713,611
+- Average Price per Basket: $28.62
+- Average Lifetime Value per Household: $3,175.91
+
+**Top Customers by Revenue**
+1. Jordan Turner: $14,686.70
+2. Nicole Blue: $11,494.93
+3. Maurice Shan: $10,525.60
+4. Janet Munoz: $10,070.11
+5. Alexandra Hall: $9,710.76
+
+**Top Products by Sales Value**
+1. Mountain-200 Black, 46: $718,987.58
+2. Mountain-200 Silver, 46: $687,794.17
+3. Mountain-200 Black, 38: $668,006.02
+4. Mountain-200 Black, 42: $647,760.93
+5. Mountain-200 Silver, 38: $641,145.80
+
+**Product Category Analysis**
+- Bikes: 50.8% of sales (dominant category)
+- Helmets: 33.5% of sales
+- Gloves: 15.7% of sales
+
+### Customer Segmentation
+
+**Top Household Revenue Analysis**
+- Distribution skewed toward long-tail (80/20 pattern)
+- 2,099 total households with wide variation in lifetime value
+- Opportunity for targeted customer retention strategies
+
+**Most Purchased Items**
+- Analyzed product frequency within top 10 customer segments
+- Identified cross-selling opportunities and bundling potential
+- High-quantity transactions for bulk/industrial items
+
+**Top Customer by Category**
+- Bikes: Carson Butler ($318.00)
+- Helmets: Hailey Patterson ($209.94)
+- Gloves: Joan Coleman ($97.96)
+
+## Key Implementations
+
+### Data Wrangling
+```python
+# Type casting for memory optimization
+transactions = transactions.astype({
+    'day': 'int8',
+    'quantity': 'int32',
+    'storeid': 'int32',
+    'weekno': 'int8'
+})
+
+# Feature engineering
+transactions = (transactions
+    .assign(
+        totaldiscount=transactions['retaildisc'] + transactions['coupondisc'],
+        percentdiscount=lambda x: x['totaldiscount']/x['salesvalue']
+    )
+    .abs()
+    .apply(lambda y: 1 if y > 1 else 0 if y < 0 else y)
+    .drop(['retaildisc', 'coupondisc', 'couponmatchdisc'], axis=1)
+)
+```
+
+### Exploratory Data Analysis
+- Histogram distributions of household spending patterns
+- Aggregation queries across multiple dimensions
+- Top-N analysis with ranking and filtering
+- Cross-tabulation and pivot table operations
+- Groupby operations with multiple aggregation functions
+
+## Repository Structure
+
+```
+├── data/
+│   ├── Transactions.csv (main dataset - 52.7 MB)
+│   └── Product.csv (product catalog - 6.4 MB)
+├── Transactions-Analysis-using-Pandas.ipynb
+└── README.md
+```
+
+## Key Accomplishments
+
+✓ Processed 2.1M+ transaction records without memory issues  
+✓ Achieved 25% memory reduction through intelligent type casting  
+✓ Identified zero missing values (clean dataset)  
+✓ Extracted multi-dimensional business insights  
+✓ Segmented 2,099 customers into value tiers  
+✓ Analyzed 84,138 products across multiple categories  
+✓ Performed comprehensive EDA with visualization  
+✓ Generated actionable recommendations for business stakeholders  
+
+## Skills Demonstrated
+
+**Data Processing & Analysis:**
+- Advanced Pandas operations (groupby, aggregation, filtering)
+- NumPy numerical computations
+- Data type optimization and memory management
+- Feature engineering and derived metrics
+- Multi-dimensional aggregations and pivoting
+
+**Data Quality & Exploration:**
+- Missing data assessment and handling
+- Outlier identification and analysis
+- Distribution analysis and statistics
+- Data validation and consistency checks
+- Uniqueness and cardinality analysis
+
+**Business Analytics:**
+- Customer segmentation and RFM analysis
+- Product performance analysis
+- Revenue attribution and allocation
+- Discount impact assessment
+- Cross-selling opportunity identification
+
+**Python Development:**
+- Jupyter Notebook programming
+- Pandas/NumPy library mastery
+- Data visualization with Matplotlib
+- Lambda functions and functional programming
+- Complex data transformations and aggregations
+
+---
+
+*This project demonstrates practical data analysis skills for business intelligence, customer analytics, and due diligence in acquisition scenarios.*
